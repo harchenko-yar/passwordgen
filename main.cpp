@@ -13,10 +13,29 @@
 
 int main(int argc, char** argv) {
     try {
+        Client cli;
+        unsigned length = 0;
         auto parser = parse_args(QCoreApplication(argc, argv));
-        auto pwdgen = PasswordGenerator(select_alphabet(*parser));
-        auto length = parser->value("length").toUInt();
-        std::cout << pwdgen.generate(length) << std::endl;
+        std::string alphabet = select_alphabet(*parser);
+        MediumGen m(alphabet);
+        SimpleGen s(alphabet);
+        HardGen h(alphabet);
+        CustomGen c(alphabet);
+        JsonGen j(alphabet);
+
+        if (parser->isSet("length"))
+            length = parser->value("length").toUInt();
+        if (parser->isSet("medium"))
+            cli.setGenerator(&m);
+        else if (parser->isSet("strong"))
+            cli.setGenerator(&h);
+        else if (parser->isSet("alphabet"))
+            cli.setGenerator(&c);
+        else if (parser->isSet("from"))
+            cli.setGenerator(&j);
+        else
+            cli.setGenerator(&s);
+        std::cout << cli.generate(length) << std::endl;
     }
     catch (const std::exception& ex) {
         std::cout << "ERROR: " << ex.what() << std::endl;
