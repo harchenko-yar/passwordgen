@@ -11,24 +11,34 @@ QScopedPointer<QCommandLineParser> parse_args(const QCoreApplication& app) {
     parser->addOption({
         "simple",
         "Generates simple password."
-    });
+        });
 
     parser->addOption({
         {"medium", "m"},
         "Generates medium complexity password."
-    });
+        });
 
     parser->addOption({
         {"strong", "s"},
         "Generates most complex password."
-    });
+        });
 
     parser->addOption({
         {"length", "l"},
         "Generates password of specified length.",
-        "LENGTH",
-        "10"
-    });
+        "LENGTH"
+        });
+    parser->addOption({
+        {"alphabet", "a"},
+        "Generates password using given alphabet.",
+        "ALPHABET"
+        });
+
+    parser->addOption({
+        {"from", "f"},
+        "Takes an alphabet with a given name from ~/.passwordgen.",
+        "ALPHABET_NAME"
+        });
 
     parser->process(app);
 
